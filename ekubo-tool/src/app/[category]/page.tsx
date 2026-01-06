@@ -23,9 +23,19 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
     return { title: '分类不存在' }
   }
 
+  const tools = getToolsByCategory(categorySlug)
+  const title = `${category.name} - 免费在线工具`
+  const description = `${category.name}相关的在线工具集合，共 ${tools.length} 个免费工具。本地处理，保护隐私。`
+
   return {
-    title: `${category.name} - ekubo-tool`,
-    description: `${category.name}相关的在线工具集合`,
+    title,
+    description,
+    keywords: [category.name, '在线工具', '免费工具', ...tools.slice(0, 5).map(t => t.name)],
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+    },
   }
 }
 

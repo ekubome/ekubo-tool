@@ -61,16 +61,26 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: ToolPageProps): Promise<Metadata> {
-  const { tool: toolSlug } = await params
+  const { category: categorySlug, tool: toolSlug } = await params
   const tool = getToolBySlug(toolSlug)
+  const category = getCategoryBySlug(categorySlug)
 
-  if (!tool) {
+  if (!tool || !category) {
     return { title: '工具不存在' }
   }
 
+  const title = `${tool.name} - 在线免费${category.name}`
+  const description = `${tool.description}。免费在线使用，无需下载安装，文件本地处理保护隐私。`
+
   return {
-    title: `${tool.name} - 在线免费工具 | ekubo-tool`,
-    description: tool.description,
+    title,
+    description,
+    keywords: [tool.name, category.name, '在线工具', '免费工具', '在线' + tool.name],
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+    },
   }
 }
 
