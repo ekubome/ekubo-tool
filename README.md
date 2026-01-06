@@ -16,9 +16,9 @@
 - 📱 **响应式** - 完美支持桌面端和移动端
 - 🆓 **完全免费** - 所有工具免费使用，无需注册
 
-## 🛠️ 工具列表
+## 🛠️ 工具列表 (42 个工具)
 
-### 📄 PDF 工具
+### 📄 PDF 工具 (8 个)
 | 工具 | 描述 |
 |------|------|
 | PDF 压缩 | 智能压缩 PDF 文件，保持清晰度 |
@@ -30,42 +30,59 @@
 | PDF 页面重排 | 调整 PDF 页面顺序 |
 | 图片转 PDF | 将多张图片合并转换为 PDF |
 
-### 🖼️ 图片工具
+### 🖼️ 图片工具 (7 个)
 | 工具 | 描述 |
 |------|------|
 | 图片压缩 | 压缩图片文件大小，支持 JPG/PNG/WebP |
 | 图片格式转换 | JPG、PNG、WebP 格式互转 |
 | 图片调整大小 | 自定义图片尺寸 |
+| 图片裁剪 | 自由裁剪图片区域 |
+| 图片水印 | 添加文字水印，支持居中/平铺/角落 |
+| 图片旋转翻转 | 旋转和翻转图片 |
+| 图片拼接 | 横向或纵向拼接多张图片 |
 
-### 📝 文本工具
+### 📝 文本工具 (8 个)
 | 工具 | 描述 |
 |------|------|
 | JSON 格式化 | 格式化和美化 JSON 数据 |
 | 文本对比 | 对比两段文本的差异 |
 | 字数统计 | 统计字数、字符数、行数、阅读时间 |
 | Markdown 预览 | 实时预览 Markdown 文档 |
+| 文本去重 | 去除重复行，支持大小写敏感 |
+| 文本排序 | 多种排序方式（字母/长度/数字/随机） |
+| 大小写转换 | 驼峰/下划线/短横线等多种格式转换 |
+| 文本清理 | 去除空格、空行，合并连续空格 |
 
-### 💻 开发工具
+### 💻 开发工具 (11 个)
 | 工具 | 描述 |
 |------|------|
 | Base64 编解码 | Base64 编码和解码 |
 | 时间戳转换 | 时间戳与日期时间互转 |
 | 二维码生成 | 生成二维码图片 |
+| 二维码识别 | 从图片或摄像头识别二维码 |
 | UUID 生成 | 生成随机 UUID |
 | 颜色转换 | HEX、RGB、HSL 格式互转 |
 | URL 编解码 | URL 编码和解码 |
 | 正则测试 | 在线测试正则表达式 |
+| JWT 解码 | 解析 JWT Token，查看过期时间 |
+| JSON ↔ CSV | JSON 和 CSV 格式互转 |
+| JSON ↔ YAML | JSON 和 YAML 格式互转 |
 
-### 🔐 加密工具
+### 🔐 加密工具 (3 个)
 | 工具 | 描述 |
 |------|------|
 | 哈希计算 | 计算 MD5、SHA1、SHA256、SHA512 |
 | 密码生成 | 生成安全的随机密码 |
+| AES 加解密 | AES-256 对称加密和解密 |
 
-### 🔢 单位换算
+### 🔢 单位换算 (5 个)
 | 工具 | 描述 |
 |------|------|
 | 进制转换 | 二进制、八进制、十进制、十六进制互转 |
+| 长度换算 | 米/英尺/英寸/里/丈等单位互转 |
+| 重量换算 | 千克/磅/斤/两等单位互转 |
+| 温度换算 | 摄氏度/华氏度/开尔文互转 |
+| 存储换算 | KB/MB/GB/TB 等单位互转（支持二进制和十进制） |
 
 ## 🚀 快速开始
 
@@ -85,10 +102,6 @@ cd ekubo-tool
 
 # 安装依赖
 npm install
-# 或
-yarn install
-# 或
-pnpm install
 ```
 
 ### 开发
@@ -96,10 +109,6 @@ pnpm install
 ```bash
 # 启动开发服务器
 npm run dev
-# 或
-yarn dev
-# 或
-pnpm dev
 ```
 
 打开浏览器访问 [http://localhost:3000](http://localhost:3000)
@@ -120,10 +129,9 @@ npm run start
 - **前端**: [React 19](https://react.dev/) - 用户界面库
 - **语言**: [TypeScript 5](https://www.typescriptlang.org/) - 类型安全
 - **样式**: [Tailwind CSS 4](https://tailwindcss.com/) - 原子化 CSS
-- **状态管理**: [Zustand](https://zustand-demo.pmnd.rs/) - 轻量级状态管理
 - **PDF 处理**: [pdf-lib](https://pdf-lib.js.org/) - PDF 操作库
-- **图片压缩**: [browser-image-compression](https://github.com/nicolo-ribaudo/browser-image-compression) - 浏览器端图片压缩
-- **二维码**: [qrcode](https://github.com/soldair/node-qrcode) - 二维码生成
+- **图片压缩**: [browser-image-compression](https://github.com/nicolo-ribaudo/browser-image-compression)
+- **二维码**: [qrcode](https://github.com/soldair/node-qrcode) + [jsQR](https://github.com/cozmo/jsQR)
 - **加密**: [crypto-js](https://github.com/brix/crypto-js) - 加密算法库
 - **UI 组件**: [Radix UI](https://www.radix-ui.com/) + [Lucide Icons](https://lucide.dev/)
 
@@ -135,7 +143,7 @@ ekubo-tool/
 │   ├── app/                    # Next.js App Router
 │   │   ├── [category]/         # 分类页面
 │   │   │   └── [tool]/         # 工具页面
-│   │   │       └── tools/      # 工具组件
+│   │   │       └── tools/      # 工具组件 (42个)
 │   │   ├── about/              # 关于页面
 │   │   ├── privacy/            # 隐私政策
 │   │   └── terms/              # 使用条款

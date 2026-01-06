@@ -8,10 +8,16 @@ import type { Metadata } from 'next'
 // Tool Components
 import { ImageCompressTool } from './tools/ImageCompressTool'
 import { ImageConvertTool } from './tools/ImageConvertTool'
+import { ImageResizeTool } from './tools/ImageResizeTool'
+import { ImageCropTool } from './tools/ImageCropTool'
+import { ImageWatermarkTool } from './tools/ImageWatermarkTool'
+import { ImageRotateTool } from './tools/ImageRotateTool'
+import { ImageMergeTool } from './tools/ImageMergeTool'
 import { JsonFormatterTool } from './tools/JsonFormatterTool'
 import { Base64Tool } from './tools/Base64Tool'
 import { TimestampTool } from './tools/TimestampTool'
 import { QRCodeTool } from './tools/QRCodeTool'
+import { QRCodeReaderTool } from './tools/QRCodeReaderTool'
 import { UUIDTool } from './tools/UUIDTool'
 import { ColorConverterTool } from './tools/ColorConverterTool'
 import { HashTool } from './tools/HashTool'
@@ -26,11 +32,22 @@ import { PDFWatermarkTool } from './tools/PDFWatermarkTool'
 import { PDFReorderTool } from './tools/PDFReorderTool'
 import { ImageToPDFTool } from './tools/ImageToPDFTool'
 import { TextDiffTool } from './tools/TextDiffTool'
+import { TextDedupeTool } from './tools/TextDedupeTool'
+import { TextSortTool } from './tools/TextSortTool'
+import { TextCaseTool } from './tools/TextCaseTool'
+import { TextTrimTool } from './tools/TextTrimTool'
 import { WordCountTool } from './tools/WordCountTool'
 import { UrlEncodeTool } from './tools/UrlEncodeTool'
 import { RegexTesterTool } from './tools/RegexTesterTool'
-import { ImageResizeTool } from './tools/ImageResizeTool'
 import { MarkdownPreviewTool } from './tools/MarkdownPreviewTool'
+import { JwtDecoderTool } from './tools/JwtDecoderTool'
+import { JsonToCsvTool } from './tools/JsonToCsvTool'
+import { JsonToYamlTool } from './tools/JsonToYamlTool'
+import { AesEncryptTool } from './tools/AesEncryptTool'
+import { LengthConverterTool } from './tools/LengthConverterTool'
+import { WeightConverterTool } from './tools/WeightConverterTool'
+import { TemperatureConverterTool } from './tools/TemperatureConverterTool'
+import { StorageConverterTool } from './tools/StorageConverterTool'
 
 interface ToolPageProps {
   params: Promise<{ category: string; tool: string }>
@@ -58,18 +75,46 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
 }
 
 const TOOL_COMPONENTS: Record<string, React.ComponentType> = {
+  // 图片工具
+  'image-crop': ImageCropTool,
+  'image-watermark': ImageWatermarkTool,
+  'image-rotate': ImageRotateTool,
+  'image-merge': ImageMergeTool,
   'image-compress': ImageCompressTool,
   'image-convert': ImageConvertTool,
   'image-resize': ImageResizeTool,
+  // 文本工具
+  'text-dedupe': TextDedupeTool,
+  'text-sort': TextSortTool,
+  'text-case': TextCaseTool,
+  'text-trim': TextTrimTool,
   'json-formatter': JsonFormatterTool,
+  'text-diff': TextDiffTool,
+  'word-count': WordCountTool,
+  'markdown-preview': MarkdownPreviewTool,
+  // 开发工具
   'base64': Base64Tool,
   'timestamp': TimestampTool,
   'qrcode': QRCodeTool,
+  'qrcode-reader': QRCodeReaderTool,
+  'jwt-decoder': JwtDecoderTool,
+  'json-to-csv': JsonToCsvTool,
+  'json-to-yaml': JsonToYamlTool,
   'uuid': UUIDTool,
   'color-converter': ColorConverterTool,
+  'url-encode': UrlEncodeTool,
+  'regex-tester': RegexTesterTool,
+  // 加密工具
+  'aes-encrypt': AesEncryptTool,
   'hash': HashTool,
   'password-generator': PasswordGeneratorTool,
+  // 单位换算
+  'length-converter': LengthConverterTool,
+  'weight-converter': WeightConverterTool,
+  'temperature-converter': TemperatureConverterTool,
+  'storage-converter': StorageConverterTool,
   'number-base': NumberBaseTool,
+  // PDF 工具
   'pdf-merge': PDFMergeTool,
   'pdf-compress': PDFCompressTool,
   'pdf-split': PDFSplitTool,
@@ -78,11 +123,6 @@ const TOOL_COMPONENTS: Record<string, React.ComponentType> = {
   'pdf-watermark': PDFWatermarkTool,
   'pdf-reorder': PDFReorderTool,
   'image-to-pdf': ImageToPDFTool,
-  'text-diff': TextDiffTool,
-  'word-count': WordCountTool,
-  'url-encode': UrlEncodeTool,
-  'regex-tester': RegexTesterTool,
-  'markdown-preview': MarkdownPreviewTool,
 }
 
 export default async function ToolPage({ params }: ToolPageProps) {
