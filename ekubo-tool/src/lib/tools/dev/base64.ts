@@ -1,6 +1,13 @@
 export function encodeBase64(input: string): string {
   try {
-    return btoa(unescape(encodeURIComponent(input)))
+    // 使用 TextEncoder 替代已弃用的 unescape/escape
+    const encoder = new TextEncoder()
+    const data = encoder.encode(input)
+    let binary = ''
+    for (let i = 0; i < data.length; i++) {
+      binary += String.fromCharCode(data[i])
+    }
+    return btoa(binary)
   } catch {
     throw new Error('编码失败，请检查输入内容')
   }
@@ -8,7 +15,14 @@ export function encodeBase64(input: string): string {
 
 export function decodeBase64(input: string): string {
   try {
-    return decodeURIComponent(escape(atob(input)))
+    // 使用 TextDecoder 替代已弃用的 unescape/escape
+    const binary = atob(input)
+    const bytes = new Uint8Array(binary.length)
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i)
+    }
+    const decoder = new TextDecoder()
+    return decoder.decode(bytes)
   } catch {
     throw new Error('解码失败，请检查输入是否为有效的 Base64 字符串')
   }

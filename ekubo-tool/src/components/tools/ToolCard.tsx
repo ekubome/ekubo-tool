@@ -9,14 +9,16 @@ interface ToolCardProps {
 }
 
 export function ToolCard({ tool }: ToolCardProps) {
-  const IconComponent = Icons[tool.icon as keyof typeof Icons] as React.ComponentType<{ className?: string }>
+  const IconComponent = Icons[tool.icon as keyof typeof Icons] as React.ComponentType<{ className?: string }> | undefined
+  // 使用 Wrench 作为 fallback 图标
+  const FallbackIcon = Icons.Wrench
 
   return (
     <Link href={`/${tool.category}/${tool.slug}`}>
       <div className="group h-full p-5 rounded-2xl border-2 border-transparent bg-white shadow-sm hover:shadow-xl hover:border-blue-100 transition-all duration-300 cursor-pointer">
         <div className="flex items-start gap-4">
           <div className="p-3 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 text-blue-600 group-hover:from-blue-500 group-hover:to-blue-600 group-hover:text-white group-hover:shadow-lg group-hover:shadow-blue-500/25 transition-all duration-300">
-            {IconComponent && <IconComponent className="w-6 h-6" />}
+            {IconComponent ? <IconComponent className="w-6 h-6" /> : <FallbackIcon className="w-6 h-6" />}
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">

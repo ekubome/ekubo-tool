@@ -23,11 +23,12 @@ export function generatePassword(options: PasswordOptions): string {
   }
 
   let password = ''
-  const array = new Uint32Array(options.length)
+  const array = new Uint8Array(options.length)
   crypto.getRandomValues(array)
 
   for (let i = 0; i < options.length; i++) {
-    password += chars[array[i] % chars.length]
+    // 使用更均匀的随机选择算法，避免模运算导致的偏差
+    password += chars[Math.floor((array[i] / 256) * chars.length)]
   }
 
   return password

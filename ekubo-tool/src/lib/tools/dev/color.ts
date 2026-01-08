@@ -7,14 +7,27 @@ export interface ColorResult {
 }
 
 export function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
-  return result
-    ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16),
-      }
-    : null
+  // 支持 3 位和 6 位十六进制颜色代码
+  let result = /^#?([a-f\d]{6})$/i.exec(hex)
+  if (result) {
+    return {
+      r: parseInt(result[1].substring(0, 2), 16),
+      g: parseInt(result[1].substring(2, 4), 16),
+      b: parseInt(result[1].substring(4, 6), 16),
+    }
+  }
+  
+  // 处理 3 位简写格式 (如 #fff)
+  result = /^#?([a-f\d])([a-f\d])([a-f\d])$/i.exec(hex)
+  if (result) {
+    return {
+      r: parseInt(result[1] + result[1], 16),
+      g: parseInt(result[2] + result[2], 16),
+      b: parseInt(result[3] + result[3], 16),
+    }
+  }
+  
+  return null
 }
 
 export function rgbToHex(r: number, g: number, b: number): string {

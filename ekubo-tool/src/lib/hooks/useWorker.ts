@@ -10,6 +10,7 @@ interface UseWorkerOptions<T> {
 
 export function useWorker<T>(workerFactory: () => Worker, options: UseWorkerOptions<T> = {}) {
   const workerRef = useRef<Worker | null>(null)
+  const workerIdRef = useRef<number>(0)
   const [isProcessing, setIsProcessing] = useState(false)
   const [progress, setProgress] = useState(0)
   const [error, setError] = useState<string | null>(null)
@@ -27,6 +28,9 @@ export function useWorker<T>(workerFactory: () => Worker, options: UseWorkerOpti
       terminate() // 终止之前的 worker
 
       try {
+        // 生成新的 worker ID 以追踪消息
+        const currentWorkerId = ++workerIdRef.current
+        
         const worker = workerFactory()
         workerRef.current = worker
         setIsProcessing(true)
@@ -34,6 +38,11 @@ export function useWorker<T>(workerFactory: () => Worker, options: UseWorkerOpti
         setError(null)
 
         worker.onmessage = (e) => {
+          // 只处理当前 worker 的消息，忽略过期的消息
+          if (workerIdRef.current !== currentWorkerId) {
+            return
+          }
+
           const { type } = e.data
 
           if (type === 'progress') {
@@ -55,6 +64,11 @@ export function useWorker<T>(workerFactory: () => Worker, options: UseWorkerOpti
         }
 
         worker.onerror = (e) => {
+          // 只处理当前 worker 的错误
+          if (workerIdRef.current !== currentWorkerId) {
+            return
+          }
+
           const errorMessage = e.message || '处理失败'
           setIsProcessing(false)
           setError(errorMessage)

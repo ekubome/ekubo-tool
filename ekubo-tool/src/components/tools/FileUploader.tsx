@@ -39,16 +39,27 @@ export function FileUploader({
     const validFiles: File[] = []
     const filesArray = Array.from(fileList)
     let hasLargeFile = false
+    const errors: string[] = []
 
-    for (const file of filesArray) {
+    // 如果不支持多文件，只取第一个
+    const filesToValidate = multiple ? filesArray : filesArray.slice(0, 1)
+
+    for (const file of filesToValidate) {
       if (maxSize > 0 && file.size > maxSize) {
-        setError(`文件 ${file.name} 超过大小限制 (${formatFileSize(maxSize)})`)
+        errors.push(`${file.name} 超过大小限制 (${formatFileSize(maxSize)})`)
         continue
       }
       if (file.size > LARGE_FILE_WARNING) {
         hasLargeFile = true
       }
       validFiles.push(file)
+    }
+
+    // 设置错误消息
+    if (errors.length > 0) {
+      setError(errors.join('; '))
+    } else {
+      setError(null)
     }
 
     if (hasLargeFile) {
@@ -58,7 +69,7 @@ export function FileUploader({
     }
 
     return validFiles
-  }, [maxSize])
+  }, [maxSize, multiple])
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault()

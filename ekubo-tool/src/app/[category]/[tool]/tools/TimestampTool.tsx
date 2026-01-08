@@ -110,11 +110,20 @@ export function TimestampTool() {
             <span>{result.local}</span>
           </div>
           <div className="flex justify-between">
+            <span className="text-gray-600">UTC 时间</span>
+            <span className="text-sm">{result.utc}</span>
+          </div>
+          <div className="flex justify-between">
             <span className="text-gray-600">ISO 格式</span>
             <span className="font-mono text-sm">{result.iso}</span>
           </div>
         </div>
       )}
+
+      {/* 时区说明 */}
+      <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-800">
+        <p>注意：本地时间基于您的浏览器时区 ({Intl.DateTimeFormat().resolvedOptions().timeZone})，时间戳为 UTC 标准时间。</p>
+      </div>
     </div>
   )
 }

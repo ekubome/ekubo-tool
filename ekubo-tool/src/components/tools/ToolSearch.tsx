@@ -43,14 +43,17 @@ export function ToolSearch() {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault()
-      setSelectedIndex(i => Math.min(i + 1, results.length - 1))
+      setSelectedIndex(i => Math.min(i + 1, Math.max(0, results.length - 1)))
     } else if (e.key === 'ArrowUp') {
       e.preventDefault()
       setSelectedIndex(i => Math.max(i - 1, 0))
-    } else if (e.key === 'Enter' && results[selectedIndex]) {
-      router.push(`/${results[selectedIndex].category}/${results[selectedIndex].slug}`)
-      setQuery('')
-      setIsOpen(false)
+    } else if (e.key === 'Enter') {
+      // 只有当有搜索结果且选中的索引有效时才导航
+      if (results.length > 0 && selectedIndex >= 0 && selectedIndex < results.length) {
+        router.push(`/${results[selectedIndex].category}/${results[selectedIndex].slug}`)
+        setQuery('')
+        setIsOpen(false)
+      }
     } else if (e.key === 'Escape') {
       setQuery('')
       setIsOpen(false)
