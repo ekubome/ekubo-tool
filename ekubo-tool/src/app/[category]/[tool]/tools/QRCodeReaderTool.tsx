@@ -75,16 +75,47 @@ export function QRCodeReaderTool() {
 
   const startCamera = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+      setError(null)
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { 
+          facingMode: 'environment',
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        } 
+      })
       streamRef.current = stream
+      
       if (videoRef.current) {
         videoRef.current.srcObject = stream
-        videoRef.current.play()
+        
+        // 等待视频元数据加载完成后再播放
+        await new Promise<void>((resolve, reject) => {
+          const video = videoRef.current!
+          
+          video.onloadedmetadata = () => {
+            video.play()
+              .then(() => resolve())
+              .catch(reject)
+          }
+          
+          video.onerror = () => reject(new Error('视频加载失败'))
+          
+          // 超时处理
+          setTimeout(() => reject(new Error('摄像头启动超时')), 10000)
+        })
       }
+      
       setUseCamera(true)
-      scanCamera()
-    } catch {
-      setError('无法访问摄像头')
+      
+      // 延迟一点开始扫描，确保视频流稳定
+      setTimeout(() => scanCamera(), 500)
+    } catch (err) {
+      console.error('Camera error:', err)
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop())
+        streamRef.current = null
+      }
+      setError('无法访问摄像头，请确保已授予摄像头权限')
     }
   }
 
@@ -104,22 +135,37 @@ export function QRCodeReaderTool() {
     if (!ctx) return
 
     const scan = () => {
-      if (!streamRef.current) return
-      if (video.readyState === video.HAVE_ENOUGH_DATA) {
+      if (!streamRef.current || !videoRef.current) return
+      
+      // 确保视频已经准备好并且有有效的尺寸
+      if (video.readyState === video.HAVE_ENOUGH_DATA && video.videoWidth > 0 && video.videoHeight > 0) {
         canvas.width = video.videoWidth
         canvas.height = video.videoHeight
-        ctx.drawImage(video, 0, 0)
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-        const code = jsQR(imageData.data, imageData.width, imageData.height)
-        if (code) {
-          setResult(code.data)
-          stopCamera()
-          return
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+        
+        try {
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+          const code = jsQR(imageData.data, imageData.width, imageData.height, {
+            inversionAttempts: 'dontInvert',
+          })
+          
+          if (code) {
+            setResult(code.data)
+            stopCamera()
+            return
+          }
+        } catch (err) {
+          console.error('QR scan error:', err)
         }
       }
-      requestAnimationFrame(scan)
+      
+      // 继续扫描
+      if (streamRef.current) {
+        requestAnimationFrame(scan)
+      }
     }
-    scan()
+    
+    requestAnimationFrame(scan)
   }
 
   const handleCopy = async () => {
@@ -165,12 +211,26 @@ export function QRCodeReaderTool() {
 
       {useCamera && (
         <div className="space-y-4">
-          <div className="relative bg-black rounded-xl overflow-hidden">
-            <video ref={videoRef} className="w-full" playsInline />
+          <div className="relative bg-black rounded-xl overflow-hidden aspect-video">
+            <video 
+              ref={videoRef} 
+              className="w-full h-full object-cover" 
+              playsInline 
+              muted
+              autoPlay
+            />
             <canvas ref={canvasRef} className="hidden" />
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="w-48 h-48 border-2 border-white/50 rounded-lg" />
+              <div className="w-48 h-48 border-2 border-white/50 rounded-lg">
+                <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-white rounded-tl" />
+                <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-white rounded-tr" />
+                <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-white rounded-bl" />
+                <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-white rounded-br" />
+              </div>
             </div>
+            <p className="absolute bottom-4 left-0 right-0 text-center text-white text-sm bg-black/50 py-2">
+              将二维码对准框内
+            </p>
           </div>
           <Button variant="outline" onClick={stopCamera} className="w-full">取消扫描</Button>
         </div>
