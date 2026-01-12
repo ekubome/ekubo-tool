@@ -136,6 +136,16 @@ export const TOOLS: ToolConfig[] = [
     acceptedTypes: ['.jpg', '.jpeg', '.png', '.webp', 'image/jpeg', 'image/png', 'image/webp'],
     multiple: true,
   },
+  {
+    slug: 'pdf-to-markdown',
+    name: 'PDF 转 Markdown',
+    description: '将 PDF 文档转换为 Markdown 格式，支持自动识别标题和列表',
+    category: 'pdf',
+    icon: 'FileCode',
+    isClientSide: true,
+    maxFileSize: 50 * 1024 * 1024,
+    acceptedTypes: ['.pdf', 'application/pdf'],
+  },
   // 图片工具
   {
     slug: 'image-crop',

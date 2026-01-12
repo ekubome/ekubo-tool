@@ -31,6 +31,7 @@ import { PDFRotateTool } from './tools/PDFRotateTool'
 import { PDFWatermarkTool } from './tools/PDFWatermarkTool'
 import { PDFReorderTool } from './tools/PDFReorderTool'
 import { ImageToPDFTool } from './tools/ImageToPDFTool'
+import { PDFToMarkdownTool } from './tools/PDFToMarkdownTool'
 import { TextDiffTool } from './tools/TextDiffTool'
 import { TextDedupeTool } from './tools/TextDedupeTool'
 import { TextSortTool } from './tools/TextSortTool'
@@ -133,6 +134,7 @@ const TOOL_COMPONENTS: Record<string, React.ComponentType> = {
   'pdf-watermark': PDFWatermarkTool,
   'pdf-reorder': PDFReorderTool,
   'image-to-pdf': ImageToPDFTool,
+  'pdf-to-markdown': PDFToMarkdownTool,
 }
 
 export default async function ToolPage({ params }: ToolPageProps) {
