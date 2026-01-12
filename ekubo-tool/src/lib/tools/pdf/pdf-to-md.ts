@@ -8,7 +8,10 @@ async function getPdfJs() {
   
   if (!pdfjsLib) {
     pdfjsLib = await import('pdfjs-dist')
-    pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`
+    
+    // 使用 unpkg CDN，更可靠
+    const version = pdfjsLib.version
+    pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${version}/build/pdf.worker.min.mjs`
   }
   
   return pdfjsLib
